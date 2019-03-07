@@ -71,7 +71,15 @@ sourceコマンド実行後、ディレクトリが　~/rp3/build/rpi3　とな�
 
 ~/rp3/build/rpi3/conf にある bblayers.conf と local.conf をエディタで修正します。以下は nano エディタで編集する場合の操作例。
 
+```sh
+$ cd conf
+$ nano bblayers.conf 
+$ nano local.conf 
+```
+
 #### bblayers.conf の編集
+
+編集後の内容
 
 ```yaml
 # POKY_BBLAYERS_CONF_VERSION is increased each time build/conf/bblayers.conf
@@ -82,7 +90,7 @@ BBPATH = "${TOPDIR}"
 BBFILES ?= ""
 
 BBLAYERS ?= " \
-  <strong> ${TOPDIR}/../../yocto/poky/meta \ </strong>
+  ${TOPDIR}/../../yocto/poky/meta \
   ${TOPDIR}/../../yocto/poky/meta-poky \
   ${TOPDIR}/../../yocto/poky/meta-yocto-bsp \
   ${TOPDIR}/../../yocto/meta-openembedded/meta-oe \
@@ -91,34 +99,53 @@ BBLAYERS ?= " \
   ${TOPDIR}/../../yocto/meta-raspberrypi \
   "
 ```
+#### local.conf の編集
 
+編集後の内容
 
-    # POKY_BBLAYERS_CONF_VERSION is increased each time build/conf/bblayers.conf
-    # changes incompatibly
-    POKY_BBLAYERS_CONF_VERSION = "2"
+```yaml
+MACHINE = "raspberrypi3"
+DISTRO ?= "poky"
+PACKAGE_CLASSES ?= "package_rpm"
+EXTRA_IMAGE_FEATURES ?= "debug-tweaks ssh-server-openssh"
+USER_CLASSES ?= "buildstats image-mklibs image-prelink"
+PATCHRESOLVE = "noop"
+CONF_VERSION = "1"
 
-    BBPATH = "${TOPDIR}"
-    BBFILES ?= ""
+SSTATE_DIR ?= "${TOPDIR}/../../sstate-cache"
+TMPDIR ?= "${TOPDIR}/../../tmp"
+DL_DIR ?= "${TOPDIR}/../../downloads"
 
-    BBLAYERS ?= " \
-      ** ${TOPDIR}/../../yocto/poky/meta \ **
-      ${TOPDIR}/../../yocto/poky/meta-poky \
-      ${TOPDIR}/../../yocto/poky/meta-yocto-bsp \
-      ${TOPDIR}/../../yocto/meta-openembedded/meta-oe \
-      ${TOPDIR}/../../yocto/meta-openembedded/meta-networking \
-      ${TOPDIR}/../../yocto/meta-openembedded/meta-python \
-      ${TOPDIR}/../../yocto/meta-raspberrypi \
-      "
+PACKAGECONFIG_append_pn-qemu-native = " sdl"
+PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
+BB_DISKMON_DIRS ??= "\
+    STOPTASKS,${TMPDIR},1G,100K \
+    STOPTASKS,${DL_DIR},1G,100K \
+    STOPTASKS,${SSTATE_DIR},1G,100K \
+    STOPTASKS,/tmp,100M,100K \
+    ABORT,${TMPDIR},100M,1K \
+    ABORT,${DL_DIR},100M,1K \
+    ABORT,${SSTATE_DIR},100M,1K \
+    ABORT,/tmp,10M,1K"
 
-
-
-```sh
-
+#SDKMACHINE ?= "i686"
+#ASSUME_PROVIDED += "libsdl-native"
 ```
 
+## ビルド
 
+### bitbake実行
+	■~/rp3/build/rpi　で下記のコマンド実行
+bitbake core-image-base
 
-## 開発準備
+```sh
+$ cd conf
+$ nano bblayers.conf 
+$ nano local.conf 
+```
 
+初回は環境により3時間～10時間かかります
+2回目以降は1/3～半分程度
+インターネット上の情報を参照しながら、Linuxカーネル、ブートローダー、全アプリケーションのビルドを行います。
 
 
