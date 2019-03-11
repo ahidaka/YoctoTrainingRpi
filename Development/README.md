@@ -190,7 +190,7 @@ $ sudo umount /dev/sdc*
 でログインします。今回の設定は openssh Server を有効にしているため、LANを接続している場合には ssh でそのままログインできるので、扱いに注意してください。
  	
 ### 固定IPアドレス
-**/etc/network/interface** ファイルを編集して固定IPアドレスを設定可能です。
+ターゲットにログイン後、**/etc/network/interface** ファイルを編集して固定IPアドレスを設定可能です。
 
 ## SDK
 
@@ -210,16 +210,26 @@ $ bitbake core-image-base -c populate_sdk
 
 ### SDK インストール
 
-次の様な名前で .sh ファイルが出来ていることを確認します。 
+次の様な名前で *.sh ファイルが出来ていることを確認します。 
 
 ```sh
-~/rp3/tmp/deploy/sdk/poky-glibc-x86_64-core-image-base-cortexa7t2hf-neon-vfpv4-toolchain-2.6.1.sh
+~/rp3/build/rpi3/tmp/deploy/sdk/poky-glibc-x86_64-core-image-base-cortexa7t2hf-neon-vfpv4-toolchain-2.6.1.sh
 ```
 
 これを実行します。
 
 ```sh
+$ cd ~/rp3/build/rpi3/
 $ ./tmp/deploy/sdk/poky-glibc-x86_64-core-image-base-cortexa7t2hf-neon-vfpv4-toolchain-2.6.1.sh
+```
+
+SDKディレクトリの作成場所を確認して実行します。
+
+```sh
+Poky (Yocto Project Reference Distro) SDK installer version 2.6.1
+=================================================================
+Enter target directory for SDK (default: /opt/poky/2.6.1):
+You are about to install the SDK to "/opt/poky/2.6.1". Proceed[Y/n]?
 ```
 
 完了後、SDK用の環境設定ファイルパスが次の様に表示されます。
@@ -393,8 +403,8 @@ Yocto のカーネルビルドでは一般Linuxの様な **.config** ファイ�
 $ bitbake linux-raspberrypi -c kernel_configme -f 
 ```
 
-コマンド完了後、次のパスにコンフィグファイルが作成される。
+コマンド完了後、次のパスにコンフィグファイルが作成されます。
 
 ~/rp3/build/rpi3/tmp/work/raspberrypi3-poky-linux-gnueabi/linux-raspberrypi/1_4.14.79+gitAUTOINC+9ca74c53cb-r0/linux-raspberrypi3-standard-build/.config
 
-
+以上
