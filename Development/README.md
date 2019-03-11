@@ -331,16 +331,32 @@ make
 
 ### ドライバーの転送
 
-ターゲットにログインして、IPアドレスを調べておきます。以下はターゲットのアドレスが **192.168.51.197** の例です。
-
+ターゲットにログインして、IPアドレスを調べておきます。以下はターゲットのアドレスが **192.168.51.197** の表示例です。
 ```sh
-???$ ipconfig
+# ifconfig
+eth0      Link encap:Ethernet  HWaddr B8:27:EB:37:23:4F
+          inet addr:192.168.51.197  Bcast:0.0.0.0  Mask:255.255.255.0
+          inet6 addr: fe80::ba27:ebff:fe37:234f/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:290 errors:0 dropped:87 overruns:0 frame:0
+          TX packets:63 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:16589 (16.2 KiB)  TX bytes:11385 (11.1 KiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
 ```
 
 ホスト側で操作、**scp** コマンドを使用してビルドしたドライバーを転送します。
 
 ```sh
-???$ scp params.ko root@192.168.51.197:
+$ scp params.ko root@192.168.51.197:
 ```
 
 ## ドライバーの実行
@@ -369,7 +385,7 @@ $ dmesg
 
 #### クロスビルド用カーネル作業ディレクトリの場所
 
-各種オブジェクト・モジュール, vmlinux, Image, zImage, System.map 等が配置される。
+各種オブジェクト・モジュール, vmlinux, Image, zImage, System.map 等が配置されます。
 
 ~/rp3/build/rpi3/tmp/work/raspberrypi3-poky-linux-gnueabi/linux-raspberrypi/1_4.14.79+gitAUTOINC+9ca74c53cb-r0/
 
@@ -397,7 +413,7 @@ $ bitbake linux-raspberrypi -c compile -f
 
 ### カーネルのコンフィグレーション出力
 Yocto のカーネルビルドでは一般Linuxの様な **.config** ファイルを
-使用しない。現在の CONFIG 設定を **.config** 形式で出力するコマンドは次の通り。
+使用しない。現在の CONFIG 設定を **.config** 形式で出力するコマンドは次の通りです。
 
 ```sh
 $ bitbake linux-raspberrypi -c kernel_configme -f 
